@@ -1,0 +1,281 @@
+---
+title: "LeafletExercise"
+author: "A.Casares M."
+date: "22 de diciembre de 2016"
+output: html_document
+---
+## The instantaneous world:
+
+With the right tools, presently we can literally have the world
+on the tip of our finger, with almost no effort. In this presentation
+we'll focus in one of the most awesome of those tools: **Leaflet**, 
+here as an add-in to R language.
+
+### Get a mapamundi
+
+```{r, eval=FALSE}
+library(leaflet)
+mapamundi = ""
+mapamundi <- leaflet(mapamundi)
+mapamundi <-  addTiles(mapamundi)
+mapamundi
+```    
+
+```{r, echo=FALSE}
+library(leaflet)
+mapamundi = ""
+mapamundi <- leaflet(mapamundi)
+mapamundi <-  addTiles(mapamundi)
+mapamundi
+```       
+
+You can find on this world's open street map whichever place you like, and go there.
+
+## Put a marker on a special place:
+
+You can add markers to your map one at the time, using the
+*addMarkers()* function by specifying the longitude and latitude
+
+```{r, eval=FALSE}
+library(leaflet)
+my_map <- leaflet()  %>%
+  addTiles() %>%
+  addMarkers(lat=39.2980803, lng=-76.5898801,
+            popup = "Jeff Leek's Office")
+my_map
+```    
+
+## Your first map:
+
+```{r, echo=FALSE}
+library(leaflet)
+my_map <- leaflet()  %>%
+  addTiles() %>%
+  addMarkers(lat=39.2980803, lng=-76.5898801,
+  popup = "Jeff Leek's Office")
+  # addMarkers(lat=-0.156230, lng=-78.463261,
+  #            popup = "Familia Casares Stacey")
+my_map
+```         
+
+## Adding many Markers:
+
+If you have a dataframe with columns *lat* and *lng* you can pipe
+that dataframe into *leaflet()* to add all the points at once.
+
+```{r, eval=FALSE}
+set.seed(2016-04-25)
+df <- data.frame(lat = runif(20, min = 39.2, max = 39.3),
+                 lng = runif(20, min = -76.6, max = -76.5))
+                 
+df %>%
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers()
+```    
+
+```{r, echo=FALSE,warning=FALSE}
+set.seed(2016-04-25)
+df <- data.frame(lat = runif(20, min = 39.2, max = 39.3),
+                 lng = runif(20, min = -76.6, max = -76.5))
+                 
+df %>%
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers()
+```    
+
+## Making Custom Markers
+
+In ocassions, you prefer to use your own design, and not the standard blue markers:   
+
+Also, when adding multiple markers to a map, you may want to add popups for each
+marker. You can specify a string of plain text for each popup, or you can
+provide HTML which will be rendered inside of each popup.
+
+```{r, eval=FALSE}
+hopkinsIcon <- makeIcon(
+  iconUrl = "http://brand.jhu.edu/content/uploads/2014/06/university.shield.small_.blue_.png",
+  iconWidth = 31*215/230, iconHeight = 31,
+  iconAnchorX = 31*215/230/2, iconAnchorY = 16
+)
+
+hopkinsLatLong <- data.frame(
+  lat = c(39.2973166, 39.3288851, 39.2906617, 39.2970681, 39.2824806),
+  lng = c(-76.5929798, -76.6206598, -76.5469683, -76.6150537, -76.6016766))
+
+``` 
+
+```{r, echo=FALSE}
+hopkinsIcon <- makeIcon(
+  iconUrl = "http://brand.jhu.edu/content/uploads/2014/06/university.shield.small_.blue_.png",
+  iconWidth = 31*215/230, iconHeight = 31,
+  iconAnchorX = 31*215/230/2, iconAnchorY = 16
+)
+
+hopkinsLatLong <- data.frame(
+  lat = c(39.2973166, 39.3288851, 39.2906617, 39.2970681, 39.2824806),
+  lng = c(-76.5929798, -76.6206598, -76.5469683, -76.6150537, -76.6016766))
+
+```    
+
+## Adding multiple popups:
+
+```{r, echo=FALSE}
+hopkinsSites <- c(
+  "<a href='http://www.jhsph.edu/'>East Baltimore Campus</a>",
+  "<a href='https://apply.jhu.edu/visit/homewood/'>Homewood Campus</a>",
+  "<a href='http://www.hopkinsmedicine.org/johns_hopkins_bayview'>Bayview Medical Center</a>",
+  "<a href='http://www.peabody.jhu.edu/'>Peabody Institute</a>",
+  "<a href='http://carey.jhu.edu/'>Carey Business School</a>"
+)
+
+hopkinsLatLong %>%
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(icon = hopkinsIcon, popup = hopkinsSites)
+```     
+
+## Mapping clusters
+
+If there are many markers on a zone, and the scale is too short, you cannnot distinguish
+the markers from one another. In that case, *leaflet* can cluster them inside a circle, 
+with the option *clusterOptions*. Each cluster bears the number of contained markers, and may afterwards be opened via zooming in:
+
+```{r, eval=FALSE}
+df <- data.frame(lat = runif(500, min = 39.25, max = 39.35),
+                 lng = runif(500, min = -76.65, max = -76.55))
+df %>%
+  leaflet()  %>%
+  addTiles()  %>%
+  addMarkers(clusterOptions = markerClusterOptions())
+````   
+
+```{r, echo=FALSE}
+df <- data.frame(lat = runif(500, min = 39.25, max = 39.35),
+                 lng = runif(500, min = -76.65, max = -76.55))
+df %>%
+  leaflet()  %>%
+  addTiles()  %>%
+  addMarkers(clusterOptions = markerClusterOptions())
+```
+
+## Mapping circle markers:
+
+Instead of adding markers or clusters you can easily add
+circle markers using *addCircleMarkers()*.
+
+```{r, eval=FALSE}
+df <- data.frame(lat = runif(20, min = 39.25, max = 39.35),
+                 lng = runif(20, min = -76.65, max = -76.55))
+                 
+df %>%
+  leaflet() %>%
+  addTiles() %>%
+  addCircleMarkers()
+```     
+
+
+```{r, echo=FALSE}
+df <- data.frame(lat = runif(20, min = 39.25, max = 39.35),
+                 lng = runif(20, min = -76.65, max = -76.55))
+                 
+df %>%
+  leaflet() %>%
+  addTiles() %>%
+  addCircleMarkers()
+```     
+
+## Drawing circles
+You can draw arbitrary shapes in the maps you create, including circles and squares.
+The code below draws a map where the circle on each city is proportional to the
+population of that city.
+
+```{r, eval=FALSE}
+md_cities <- data.frame(name = c("Baltimore","Frederick","Rockville","Gaithersburg",
+                                "Bowie","Hagerstown","Annapolis","College Park",
+                                "Salisbury","Laurel"),
+                        pop = c(619493, 66169, 62334, 61045, 55232,
+                                39890, 38880, 30587, 30484, 25346),
+                        lat = c(39.2920592, 39.4143921, 39.084, 39.1434, 39.0068, 39.6418,
+                                38.9784, 38.9897, 38.3607, 39.0993),
+                        lng = c(-76.6077852,-77.4204875,-77.1528,-77.2014,-76.7791,
+                                -77.72,-76.4922,-76.9378,-75.5994,-76.8483)
+                        )        
+md_cities %>%
+  leaflet()  %>%
+  addTiles()  %>%
+  addCircles(weight = 1, radius = sqrt(md_cities$pop) * 30)
+
+```    
+
+```{r, echo=FALSE, warning=FALSE, comment=""}
+md_cities <- data.frame(name = c("Baltimore","Frederick","Rockville","Gaithersburg",
+                                "Bowie","Hagerstown","Annapolis","College Park",
+                                "Salisbury","Laurel"),
+                        pop = c(619493, 66169, 62334, 61045, 55232,
+                                39890, 38880, 30587, 30484, 25346),
+                        lat = c(39.2920592, 39.4143921, 39.084, 39.1434, 39.0068, 39.6418,
+                                38.9784, 38.9897, 38.3607, 39.0993),
+                        lng = c(-76.6077852,-77.4204875,-77.1528,-77.2014,-76.7791,
+                                -77.72,-76.4922,-76.9378,-75.5994,-76.8483)
+                        )        
+md_cities %>%
+  leaflet()  %>%
+  addTiles()  %>%
+  addCircles(weight = 1, radius = sqrt(md_cities$pop) * 30)
+
+```     
+
+## Drawing Rectangles:
+
+You can add rectangles on *leaflet* maps as well. Just give the coordinates
+of to oposed vertices.
+
+```{r, eval=FALSE, warning=FALSE, error=FALSE}
+leaflet()  %>%
+    addTiles()  %>%
+    addRectangles(lat1 = 37.3858, lng1 = -122.0595,
+                  lat2 = 37.3890, lng2 = -122.0625)
+``` 
+
+```{r, echo=FALSE, warning=FALSE, error=FALSE}
+leaflet()  %>%
+    addTiles()  %>%
+    addRectangles(lat1 = 37.3858, lng1 = -122.0595,
+                  lat2 = 37.3890, lng2 = -122.0625)
+
+```    
+
+## Adding legends    
+
+Adding a legend can be useful if you have markers on your map with
+different colors.
+
+```{r, eval=FALSE}
+df <- data.frame(lat = runif(20, min = 39.25, max = 39.35),
+                 lng = runif(20, min = -76.65, max = -76.55),
+                 col = sample(c("red","blue","green"),20, replace = TRUE),
+                 stringsAsFactors = FALSE)
+df %>%
+  leaflet()  %>%
+  addTiles()  %>%
+  addCircleMarkers(color = df$col) %>%
+  addLegend(labels = LETTERS[1:3], colors = c("blue","red","green"))
+````   
+
+```{r, echo=FALSE, comment=""}
+df <- data.frame(lat = runif(20, min = 39.25, max = 39.35),
+                 lng = runif(20, min = -76.65, max = -76.55),
+                 col = sample(c("red","blue","green"),20, replace = TRUE),
+                 stringsAsFactors = FALSE)
+df %>%
+  leaflet()  %>%
+  addTiles()  %>%
+  addCircleMarkers(color = df$col) %>%
+  addLegend(labels = LETTERS[1:3], colors = c("blue","red","green"))
+````   
+
+Isn't it easy and amazing? It's certainly worth of its learning time.
+
+Well, that's all for now, folks!   
