@@ -229,7 +229,7 @@ md_cities %>%
 
 ## Drawing Rectangles:
 
-You can add rectangles - parallel to the window borders - on *leaflet* maps as well. Just give the coordinates
+You can add rectangles - parallel to the window - on *leaflet* maps as well. Just give the coordinates
 of two opposed vertices.
 
 ```{r, eval=FALSE, warning=FALSE, error=FALSE}
