@@ -230,7 +230,7 @@ md_cities %>%
 ## Drawing Rectangles:
 
 You can add rectangles on *leaflet* maps as well. Just give the coordinates
-of two oposed vertices.
+of two opposed vertices.
 
 ```{r, eval=FALSE, warning=FALSE, error=FALSE}
 leaflet()  %>%
