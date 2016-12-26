@@ -121,6 +121,20 @@ hopkinsLatLong <- data.frame(
 
 ## Adding multiple popups:
 
+```{r, eval=FALSE}
+hopkinsSites <- c(
+  "<a href='http://www.jhsph.edu/'>East Baltimore Campus</a>",
+  "<a href='https://apply.jhu.edu/visit/homewood/'>Homewood Campus</a>",
+  "<a href='http://www.hopkinsmedicine.org/johns_hopkins_bayview'>Bayview Medical Center</a>",
+  "<a href='http://www.peabody.jhu.edu/'>Peabody Institute</a>",
+  "<a href='http://carey.jhu.edu/'>Carey Business School</a>"
+)
+
+hopkinsLatLong %>%
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(icon = hopkinsIcon, popup = hopkinsSites)
+```
 ```{r, echo=FALSE}
 hopkinsSites <- c(
   "<a href='http://www.jhsph.edu/'>East Baltimore Campus</a>",
@@ -134,7 +148,7 @@ hopkinsLatLong %>%
   leaflet() %>%
   addTiles() %>%
   addMarkers(icon = hopkinsIcon, popup = hopkinsSites)
-```     
+```
 
 ## Mapping clusters
 
